@@ -7,49 +7,21 @@ import * as Google from 'expo-auth-session/providers/google';
 import * as WebBrowser from 'expo-web-browser';
 import axios from 'axios';
 import { API_URL } from '@env';
-import app from './src/firebaseConfig'; // Certifique-se de que o arquivo firebaseConfig.js está configurado corretamente
+import app from './src/firebaseConfig';
 
 WebBrowser.maybeCompleteAuthSession();
 
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
   const [request, response, promptAsync] = Google.useAuthRequest({
     expoClientId: '844595082512-jl9hljhmie8kmrsjnmvpuiafj6osqu8p.apps.googleusercontent.com',
     androidClientId: '844595082512-jl9hljhmie8kmrsjnmvpuiafj6osqu8p.apps.googleusercontent.com',
     iosClientId: '844595082512-jl9hljhmie8kmrsjnmvpuiafj6osqu8p.apps.googleusercontent.com',
-    redirectUri: 'https://auth.expo.io/@pedroasenna/mobifood', // Força o uso do URI do Expo
+    redirectUri: 'https://auth.expo.io/@pedroasenna/mobile',
   });
-
-  const handleGoogleLogin = async () => {
-    console.log('Iniciando login com Google...');
-    if (response?.type === 'success') {
-      console.log('Resposta de sucesso:', response);
-      const { id_token } = response.authentication;
-      const auth = getAuth(app);
-      const credential = GoogleAuthProvider.credential(id_token);
-
-      try {
-        const result = await signInWithCredential(auth, credential);
-        const user = result.user;
-
-        console.log('Usuário autenticado:', user);
-
-        // Armazena o token do usuário no AsyncStorage
-        await AsyncStorage.setItem('userToken', user.accessToken);
-
-        Alert.alert('Login bem-sucedido!', `Bem-vindo, ${user.displayName}`);
-        navigation.navigate('Dashboard');
-      } catch (error) {
-        console.error('Erro ao autenticar com Google:', error);
-        Alert.alert('Erro', 'Não foi possível fazer login com Google.');
-      }
-    } else {
-      console.log('Resposta inválida:', response);
-      promptAsync();
-    }
-  };
 
   const handleLogin = async () => {
     console.log('Iniciando login com e-mail e senha...');
@@ -63,16 +35,10 @@ export default function LoginScreen({ navigation }) {
       const response = await axios.post(`${API_URL}/auth/login`, { email, password });
 
       console.log('Resposta do backend:', response.data);
-
-      // Armazena o token no AsyncStorage
       await AsyncStorage.setItem('userToken', response.data.token);
-
-      // Navega para o Dashboard
       navigation.navigate('Dashboard');
     } catch (error) {
       console.error('Erro ao fazer login:', error);
-
-      // Tratamento de erros
       if (error.response?.status === 401) {
         Alert.alert('Erro', 'Credenciais inválidas.');
       } else if (error.response?.status === 404) {
@@ -87,6 +53,8 @@ export default function LoginScreen({ navigation }) {
     <ScrollView contentContainerStyle={styles.container}>
       <Image source={require('./assets/ImageLogin.png')} style={styles.image} />
       <Text style={styles.title}>Login</Text>
+      
+      {/* Campo de Email */}
       <View style={styles.inputContainer}>
         <Ionicons name="mail-outline" size={20} color="#666" style={styles.icon} />
         <TextInput
@@ -96,9 +64,10 @@ export default function LoginScreen({ navigation }) {
           value={email}
           onChangeText={setEmail}
           autoCapitalize="none"
-          underlineColorAndroid="transparent"
         />
       </View>
+
+      {/* Campo de Senha com "olhinho" */}
       <View style={styles.inputContainer}>
         <Ionicons name="lock-closed-outline" size={20} color="#666" style={styles.icon} />
         <TextInput
@@ -107,20 +76,34 @@ export default function LoginScreen({ navigation }) {
           placeholderTextColor="rgba(0, 0, 0, 0.5)"
           value={password}
           onChangeText={setPassword}
-          secureTextEntry
-          underlineColorAndroid="transparent"
+          secureTextEntry={!showPassword}
         />
+        <TouchableOpacity 
+          onPress={() => setShowPassword(!showPassword)}
+          style={styles.eyeIcon}
+        >
+          <Ionicons 
+            name={showPassword ? "eye-off-outline" : "eye-outline"} 
+            size={20} 
+            color="#666" 
+          />
+        </TouchableOpacity>
       </View>
-      <Pressable style={styles.forgotPassword}>
+
+      {/* Botão "Esqueceu a senha?" */}
+      <Pressable 
+        style={styles.forgotPassword} 
+        onPress={() => navigation.navigate('ResetSenha')}
+      >
         <Text style={styles.forgotPasswordText}>Esqueceu a senha?</Text>
       </Pressable>
-      <TouchableOpacity style={styles.googleButton} onPress={handleGoogleLogin}>
-        <Ionicons name="logo-google" size={20} color="#fff" style={styles.googleIcon} />
-        <Text style={styles.googleButtonText}>Login com Google</Text>
-      </TouchableOpacity>
+
+      {/* Botão de Login */}
       <TouchableOpacity style={styles.continueButton} onPress={handleLogin}>
         <Text style={styles.continueButtonText}>Continue</Text>
       </TouchableOpacity>
+
+      {/* Link para Registro */}
       <View style={styles.registerContainer}>
         <Text>Não tem Login? </Text>
         <Pressable onPress={() => navigation.navigate('RegisterUser')}>
@@ -174,33 +157,18 @@ const styles = StyleSheet.create({
     color: '#333',
     backgroundColor: 'transparent',
     borderWidth: 0,
-    fontFamily: 'Arial',
+  },
+  eyeIcon: {
+    padding: 8,
   },
   forgotPassword: {
     alignSelf: 'flex-end',
     marginBottom: 25,
+    padding: 8,
   },
   forgotPasswordText: {
     fontWeight: 'bold',
     color: '#007AFF',
-  },
-  googleButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '100%',
-    height: 50,
-    backgroundColor: '#0FC2C0',
-    borderRadius: 8,
-    marginBottom: 15,
-  },
-  googleIcon: {
-    marginRight: 10,
-  },
-  googleButtonText: {
-    color: '#fff',
-    fontWeight: 'bold',
-    fontSize: 16,
   },
   continueButton: {
     width: '100%',

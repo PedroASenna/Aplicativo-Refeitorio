@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1023039537774",
+    "project_id": "mobifood-9563a",
+    "storage_bucket": "mobifood-9563a.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1023039537774:android:b05df13d667ffeca46dc7f",
+        "android_client_info": {
+          "package_name": "com.pedroasenna.mobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1023039537774-j7nlng1sg3fjc00jd7itgc9qqrou3tnd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pedroasenna.mobile",
+            "certificate_hash": "2c752fbce16cc7b35f4813807e2f71bf5f60d198"
+          }
+        },
+        {
+          "client_id": "1023039537774-7s16perjscimiisd0c7mdddmel07hhto.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCiJUx3XmdBTGhhPFRXq9QdnIB8TnPLaJc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1023039537774-7s16perjscimiisd0c7mdddmel07hhto.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

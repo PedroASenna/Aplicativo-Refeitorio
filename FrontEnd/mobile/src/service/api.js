@@ -4,7 +4,7 @@ import { API_URL } from '@env'; // Certifique-se de que o .env está configurado
 
 // Configura a instância do Axios
 const api = axios.create({
-  baseURL: API_URL || 'http://192.168.29.164:5000/api', // Fallback para o URL padrão
+  baseURL: API_URL || 'http://localhost:5000/api', // Fallback para o URL padrão
 });
 
 // Intercepta as requisições para adicionar o token de autenticação

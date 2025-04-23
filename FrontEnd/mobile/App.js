@@ -3,14 +3,14 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
-import LoginUser from './LoginUser'; // Tela de login para consumidores
-import LoginVenda from './LoginVenda'; // Tela de login para vendedores
-import Dashboard from './dashboard'; // Tela de Dashboard
-import SingInScreenUser from './SingInScreenUser'; // Tela de registro para consumidores
+import LoginUser from './LoginUser'; 
+import LoginVenda from './LoginVenda'; 
+import Dashboard from './dashboard'; 
+import SingInScreenUser from './SingInScreenUser'; 
+import ResetSenha from './ResetSenha'; // Importação adicionada
 
 const Stack = createStackNavigator();
 
-// Estilos movidos para antes do componente
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
 function UserTypeSelection({ navigation }) {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Quem é voçê?</Text>
+      <Text style={styles.title}>Quem é você?</Text>
       <TouchableOpacity
         style={styles.button}
         onPress={() => navigation.navigate('LoginUser')}
@@ -62,11 +62,19 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="UserTypeSelection" component={UserTypeSelection} />
+        <Stack.Screen 
+          name="UserTypeSelection" 
+          component={UserTypeSelection} 
+        />
         <Stack.Screen name="LoginUser" component={LoginUser} />
         <Stack.Screen name="LoginVenda" component={LoginVenda} />
         <Stack.Screen name="Dashboard" component={Dashboard} />
         <Stack.Screen name="RegisterUser" component={SingInScreenUser} />
+        <Stack.Screen 
+          name="ResetSenha" 
+          component={ResetSenha} 
+          options={{ title: 'Redefinir Senha' }} // Título da tela (se headerShown for true)
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

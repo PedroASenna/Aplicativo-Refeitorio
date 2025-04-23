@@ -30,7 +30,7 @@ export default function SignInScreen({ navigation }) {
     
       if (response.status === 200 || response.status === 201) {
         Alert.alert('Sucesso', 'Cadastro realizado com sucesso!');
-        navigation.navigate('Login'); // Navega para a tela de Login
+        navigation.navigate('LoginUser'); // Navega para a tela de Login
       } else {
         Alert.alert('Erro', response.data.message || 'Não foi possível realizar o cadastro. Tente novamente.');
       }
